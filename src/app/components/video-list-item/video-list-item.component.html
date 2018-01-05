@@ -1,0 +1,38 @@
+<mz-card>
+  <mz-card-content>
+
+    <div class="row no-margin-bottom">
+
+      <div class="col thumbnail-container">
+        <img class="pointer thumbnail z-depth-1" alt="Video thumbnail"
+             (click)="openVideoInBrowser()" [src]="videoInfo.thumbnail_url"/>
+      </div>
+
+      <div class="col s8 video-info">
+        <p class="truncate">
+          <strong>
+            <span class="pointer" (click)="openVideoInBrowser()">
+              {{videoInfo.title}}
+            </span>
+          </strong>
+        </p>
+
+        <p class="grey-text text-darken-1">
+          <span class="pointer" (click)="openChannelInBrowser()">
+            {{videoInfo.author.name}}
+          </span>
+        </p>
+
+      </div>
+
+    </div>
+
+    <div class="row no-margin-bottom">
+      <button mz-button [disabled]="isDownloadBtnDisabled" (click)="outputDownloadVideoEvent()" class="right">
+        download
+        <i mz-icon-mdi [icon]="'download'" [align]="'right'"></i>
+      </button>
+    </div>
+
+  </mz-card-content>
+</mz-card>

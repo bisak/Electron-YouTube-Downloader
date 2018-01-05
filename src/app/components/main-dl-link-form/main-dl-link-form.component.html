@@ -1,0 +1,11 @@
+<div class="row">
+  <form (submit)="linkSubmit($event)" class="col s12" novalidate>
+    <div class="row z-depth-1 white">
+      <mz-input-container class="col s12">
+        <input mz-input name="link-input" [validate]="false" type="url" [label]="'Your Video URL'"
+               [class.valid]="isLinkValid()" [class.invalid]="!isLinkValid() && !!link.length"
+               [ngModel]="link" (ngModelChange)="valueChange($event)">
+      </mz-input-container>
+    </div>
+  </form>
+</div>

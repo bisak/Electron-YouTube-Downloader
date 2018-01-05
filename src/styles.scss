@@ -1,0 +1,41 @@
+@import '~materialize-css/sass/components/color';
+
+$roboto-font-path: "../node_modules/materialize-css/dist/fonts/roboto/" !default;
+
+$primary-color: color("red", "accent-4");
+$secondary-color: color("light-blue", "accent-4");
+
+.vcenter {
+  margin: 0px;
+  padding: 0px;
+  float: left;
+  width: 100%;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%) translateX(-50%);
+  left: 50%;
+}
+
+.c-valign-wrapper {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.no-margin-bottom {
+  margin-bottom: 0 !important;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+body {
+  background-color: #FAFAFA !important;
+}
+
+@import '~materialize-css/sass/materialize';
+@import '~materialize-css/sass/components/variables';
