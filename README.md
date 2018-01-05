@@ -6,7 +6,7 @@
 
 1. Clone this repo
 
-2. `npm install -g electron`
+2. `npm install`
 
 3. `npm run angular-start`
 
