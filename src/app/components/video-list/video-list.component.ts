@@ -26,8 +26,4 @@ export class VideoListComponent implements OnInit {
     });
   }
 
-  downloadVideo (videoToDownloadInfo) {
-    this.electronService.ipcRenderer.send('video:download_single', videoToDownloadInfo);
-  }
-
 }

@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewEncapsulation } from '@angular/core';
 import { ElectronService } from 'ngx-electron';
 import { MzToastService } from 'ng2-materialize';
 
@@ -7,11 +7,12 @@ import { MzToastService } from 'ng2-materialize';
   templateUrl: './video-list-item.component.html',
   styleUrls: ['./video-list-item.component.scss']
 })
-export class VideoListItemComponent implements OnInit {
+export class VideoListItemComponent implements OnInit, OnDestroy {
 
   @Input() videoInfo;
-  @Output() downloadVideo = new EventEmitter<any>();
   isDownloadBtnDisabled = false;
+  percentDownloaded = 0;
+  downloadStarted = false;
 
   constructor (private electronService: ElectronService,
                private changeDetectorRef: ChangeDetectorRef,
@@ -19,6 +20,10 @@ export class VideoListItemComponent implements OnInit {
   }
 
   ngOnInit () {
+  }
+
+  ngOnDestroy () {
+    console.log('destroyed');
   }
 
   openChannelInBrowser () {
@@ -32,15 +37,29 @@ export class VideoListItemComponent implements OnInit {
   outputDownloadVideoEvent () {
     this.isDownloadBtnDisabled = true;
     this.changeDetectorRef.detectChanges(); // Why the hell
-    this.downloadVideo.emit(this.videoInfo);
+
+    this.downloadVideo(this.videoInfo);
     this.listenForCompletion();
+    this.listenForProgress();
   }
 
   listenForCompletion () {
-    this.electronService.ipcRenderer.on('video:download_success', (event, data) => {
-      this.toast.show('Video should have downloaded somewhere', 1000, 'green');
+    let listener = this.electronService.ipcRenderer.on('video:download_success', (event, data) => {
       this.changeDetectorRef.detectChanges();
     });
+  }
+
+  listenForProgress () {
+    this.electronService.ipcRenderer.on('video:download_progress', (event, data) => {
+      this.downloadStarted = true;
+      console.log('download progress');
+      this.percentDownloaded = data.percentDownloaded;
+      this.changeDetectorRef.detectChanges();
+    });
+  }
+
+  downloadVideo (videoToDownloadInfo) {
+    this.electronService.ipcRenderer.send('video:download_single', videoToDownloadInfo);
   }
 
 }

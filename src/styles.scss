@@ -29,8 +29,17 @@ $secondary-color: color("light-blue", "accent-4");
   margin-bottom: 0 !important;
 }
 
+.video-row {
+  height: 90px;
+}
+
 .pointer {
   cursor: pointer;
+}
+
+.video-download-progress {
+  margin: -10px 0 0 0 !important;
+  border-radius: 0 !important;
 }
 
 body {
