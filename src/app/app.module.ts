@@ -12,6 +12,7 @@ import { MainDlLinkFormComponent } from './components/main-dl-link-form/main-dl-
 import { MainPageComponent } from './components/main-page/main-page.component';
 import { VideoListComponent } from './components/video-list/video-list.component';
 import { VideoListItemComponent } from './components/video-list-item/video-list-item.component'
+import { HelperService } from './services/helper.service';
 
 @NgModule({
   declarations: [
@@ -30,6 +31,7 @@ import { VideoListItemComponent } from './components/video-list-item/video-list-
     FormsModule
   ],
   providers: [
+    HelperService
   ],
   bootstrap: [AppComponent]
 })

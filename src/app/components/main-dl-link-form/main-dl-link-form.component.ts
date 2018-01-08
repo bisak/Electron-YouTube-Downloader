@@ -36,8 +36,8 @@ export class MainDlLinkFormComponent implements OnInit {
   }
 
   listenForValidationResponse () {
-    this.electronService.ipcRenderer.on('link:validate_result', (ev, data) => {
-      this.isValid = data;
+    this.electronService.ipcRenderer.on('link:validation_result', (ev, isValid) => {
+      this.isValid = isValid;
       this.changeDetectorRef.detectChanges();
     });
   }
