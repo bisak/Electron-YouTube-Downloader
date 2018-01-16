@@ -1,6 +1,7 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ElectronService } from 'ngx-electron';
 import { MzToastService } from 'ng2-materialize';
+import { CommunicationService } from '../../services/communication.service';
 
 @Component({
   selector: 'app-main-dl-link-form',
@@ -14,7 +15,8 @@ export class MainDlLinkFormComponent implements OnInit {
 
   constructor (private electronService: ElectronService,
                private changeDetectorRef: ChangeDetectorRef,
-               private toast: MzToastService) {
+               private toast: MzToastService,
+               private communicationService: CommunicationService) {
   }
 
   ngOnInit () {
@@ -29,6 +31,7 @@ export class MainDlLinkFormComponent implements OnInit {
   linkSubmit (event) {
     if (this.isLinkValid()) {
       this.electronService.ipcRenderer.send('link:submit', this.link);
+      this.communicationService.videoInfoFetchStart();
     } else {
       this.toast.show('Please provide a valid URL', 1500);
     }

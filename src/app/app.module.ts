@@ -13,6 +13,8 @@ import { MainPageComponent } from './components/main-page/main-page.component';
 import { VideoListComponent } from './components/video-list/video-list.component';
 import { VideoListItemComponent } from './components/video-list-item/video-list-item.component'
 import { HelperService } from './services/helper.service';
+import { VideoInfoFetchSpinnerComponent } from './components/video-info-fetch-spinner/video-info-fetch-spinner.component';
+import { CommunicationService } from './services/communication.service';
 
 @NgModule({
   declarations: [
@@ -21,7 +23,8 @@ import { HelperService } from './services/helper.service';
     MainDlLinkFormComponent,
     MainPageComponent,
     VideoListComponent,
-    VideoListItemComponent
+    VideoListItemComponent,
+    VideoInfoFetchSpinnerComponent
   ],
   imports: [
     BrowserModule,
@@ -31,7 +34,8 @@ import { HelperService } from './services/helper.service';
     FormsModule
   ],
   providers: [
-    HelperService
+    HelperService,
+    CommunicationService
   ],
   bootstrap: [AppComponent]
 })

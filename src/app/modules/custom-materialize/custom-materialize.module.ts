@@ -7,7 +7,8 @@ import {
   MzToastModule,
   MzProgressModule,
   MzCardModule,
-  MzIconModule
+  MzIconModule,
+  MzSpinnerModule
 } from 'ng2-materialize';
 
 @NgModule({
@@ -19,7 +20,8 @@ import {
     MzToastModule,
     MzProgressModule,
     MzCardModule,
-    MzIconModule
+    MzIconModule,
+    MzSpinnerModule
   ],
   exports: [
     MzButtonModule,
@@ -29,7 +31,8 @@ import {
     MzToastModule,
     MzProgressModule,
     MzCardModule,
-    MzIconModule
+    MzIconModule,
+    MzSpinnerModule
   ]
 })
 export class CustomMaterializeModule {
