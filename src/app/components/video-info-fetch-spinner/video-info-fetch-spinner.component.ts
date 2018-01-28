@@ -15,6 +15,7 @@ export class VideoInfoFetchSpinnerComponent implements OnInit {
 
     this.communicationService.videoInfoFetchStart$.subscribe(() => {
       this.isShown = true;
+      this.changeDetectorRef.detectChanges();
     });
 
     this.communicationService.videoInfoFetchEnd$.subscribe(() => {

@@ -1,6 +1,11 @@
 <mz-card>
   <mz-card-content>
-
+    <i mz-icon-mdi
+       class="hide-card-btn pointer"
+       [icon]="'close'"
+       [size]="'small'"
+       (click)="sendHideCardEvent()">
+    </i>
     <div class="row video-row no-margin-bottom">
 
       <div class="col thumbnail-container">

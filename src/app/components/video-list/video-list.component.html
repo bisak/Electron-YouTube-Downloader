@@ -1,7 +1,7 @@
 <div *ngIf="!!videosInfo.length" class="row">
   <div class="col s12">
     <app-video-list-item *ngFor="let videoInfo of videosInfo"
-                         [videoInfo]="videoInfo">
+                         [videoInfo]="videoInfo" (hideCard)="removeVideoFromList($event)">
     </app-video-list-item>
   </div>
 </div>

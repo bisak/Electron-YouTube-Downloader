@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { ElectronService } from 'ngx-electron';
 import { HelperService } from '../../services/helper.service';
 
@@ -10,6 +10,7 @@ import { HelperService } from '../../services/helper.service';
 export class VideoListItemComponent implements OnInit, OnDestroy {
 
   @Input() videoInfo;
+  @Output() hideCard = new EventEmitter();
   isDownloadBtnDisabled = false;
   percentDownloaded = 0;
   downloadStarted = false;
@@ -60,6 +61,10 @@ export class VideoListItemComponent implements OnInit, OnDestroy {
   videoDownloadStartHandler (event, data) {
     this.isDownloadBtnDisabled = true;
     this.changeDetectorRef.detectChanges();
+  }
+
+  sendHideCardEvent () {
+    this.hideCard.emit(this.videoInfo);
   }
 
 }

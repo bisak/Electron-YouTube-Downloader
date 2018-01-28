@@ -11,22 +11,27 @@ export class VideoListComponent implements OnInit {
 
   videosInfo = [];
 
-  constructor(private electronService: ElectronService,
-              private changeDetectorRef: ChangeDetectorRef,
-              private communicationService: CommunicationService) {
+  constructor (private electronService: ElectronService,
+               private changeDetectorRef: ChangeDetectorRef,
+               private communicationService: CommunicationService) {
   }
 
-  ngOnInit() {
+  ngOnInit () {
     this.listenForVideoInfo();
   }
 
-  listenForVideoInfo() {
+  listenForVideoInfo () {
     this.electronService.ipcRenderer.on('link:video_info_success', (event, videosInfo) => {
       this.videosInfo = [videosInfo];
       this.communicationService.videoInfoFetchEnd();
       this.changeDetectorRef.detectChanges();
       // TODO remove array creation
     });
+  }
+
+  removeVideoFromList (videoToRemove) {
+    this.videosInfo = this.videosInfo.filter((video) => video.video_id !== videoToRemove.video_id);
+    this.changeDetectorRef.detectChanges();
   }
 
 }

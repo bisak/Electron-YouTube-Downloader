@@ -3,6 +3,9 @@ const ytdl = require('ytdl-core')
 const fs = require('fs')
 const path = require('path')
 const filenamify = require('filenamify')
+const ffmpeg = require('fluent-ffmpeg')
+const fse = require('fs-extra')
+const shortid = require('shortid')
 
 ipcMain.on('link:submit', (event, url) => {
   const win = BrowserWindow.fromWebContents(event.sender)
@@ -25,23 +28,33 @@ ipcMain.on('video:download_single', (event, videoInfo) => {
   })
 
   if (pathToSave) {
-    let videoStream = ytdl(videoInfo.video_url)
-    videoStream.pipe(fs.createWriteStream(pathToSave))
+    const tempDir = path.join(app.getPath('temp'), `Electron_Downloader`)
+    fse.ensureDir(tempDir).then(() => {
 
-    videoStream.once('response', () => {
-      win.webContents.send('video:download_start')
-    })
+      const randomTempName = shortid.generate()
+      const tempAudioPath = path.join(tempDir, `${randomTempName}_audio`)
+      const tempVideoPath = path.join(tempDir, `${randomTempName}_video`)
 
-    videoStream.on('progress', (chunkLength, downloaded, total) => {
-      const percentDownloaded = ((downloaded / total) * 100).toFixed(2)
-      win.webContents.send('video:download_progress', { percentDownloaded })
-    })
+      let videoStream = ytdl(videoInfo.video_url, { filter: 'videoonly' })
+      videoStream.pipe(fs.createWriteStream(tempVideoPath))
 
-    videoStream.on('end', () => {
-      win.webContents.send('video:download_success')
+      let audioStream = ytdl(videoInfo.video_url, { filter: 'audioonly' })
+      audioStream.pipe(fs.createWriteStream(tempAudioPath))
+
+      videoStream.once('response', () => {
+        win.webContents.send('video:download_start')
+      })
+
+      videoStream.on('progress', (chunkLength, downloaded, total) => {
+        const percentDownloaded = ((downloaded / total) * 100).toFixed(2)
+        win.webContents.send('video:download_progress', { percentDownloaded })
+      })
+
+      videoStream.on('end', () => {
+        win.webContents.send('video:download_success')
+      })
     })
   } else {
     win.webContents.send('video:download_cancelled')
   }
-
 })
