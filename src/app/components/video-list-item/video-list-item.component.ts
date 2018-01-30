@@ -15,6 +15,7 @@ export class VideoListItemComponent implements OnInit, OnDestroy {
   percentDownloaded = 0;
   downloadStarted = false;
   videoLength = '';
+  downloaded = false;
 
   constructor (private electronService: ElectronService,
                private changeDetectorRef: ChangeDetectorRef,
@@ -49,6 +50,7 @@ export class VideoListItemComponent implements OnInit, OnDestroy {
   }
 
   videoDownloadSuccessHandler (event, data) {
+    this.downloaded = true;
     this.changeDetectorRef.detectChanges();
   }
 

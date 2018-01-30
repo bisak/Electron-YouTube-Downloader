@@ -30,7 +30,6 @@ ipcMain.on('video:download_single', (event, videoInfo) => {
   if (pathToSave) {
     const tempDir = path.join(app.getPath('temp'), `Electron_Downloader`)
     fse.ensureDir(tempDir).then(() => {
-
       const randomTempName = shortid.generate()
       const tempAudioPath = path.join(tempDir, `${randomTempName}_audio`)
       const tempVideoPath = path.join(tempDir, `${randomTempName}_video`)
@@ -41,17 +40,50 @@ ipcMain.on('video:download_single', (event, videoInfo) => {
       let audioStream = ytdl(videoInfo.video_url, { filter: 'audioonly' })
       audioStream.pipe(fs.createWriteStream(tempAudioPath))
 
-      videoStream.once('response', () => {
+      let videoStreamStartPromise = new Promise((resolve, reject) => {
+        videoStream.once('response', resolve)
+      })
+
+      let audioStreamStartPromise = new Promise((resolve, reject) => {
+        audioStream.once('response', resolve)
+      })
+
+      Promise.all([videoStreamStartPromise, audioStreamStartPromise]).then(() => {
         win.webContents.send('video:download_start')
       })
 
+      let audioProgress = 0
+      let videoProgress = 0
+
       videoStream.on('progress', (chunkLength, downloaded, total) => {
-        const percentDownloaded = ((downloaded / total) * 100).toFixed(2)
-        win.webContents.send('video:download_progress', { percentDownloaded })
+        videoProgress = ((downloaded / total) * 100)
       })
 
-      videoStream.on('end', () => {
+      audioStream.on('progress', (chunkLength, downloaded, total) => {
+        audioProgress = ((downloaded / total) * 100)
+      })
+
+      let progressNotifier = setInterval(() => {
+        let percentDownloaded = (audioProgress + videoProgress) / 2
+        win.webContents.send('video:download_progress', { percentDownloaded })
+      }, 2000)
+
+      let videoStreamEndPromise = new Promise((resolve, reject) => {
+        videoStream.on('end', resolve)
+      })
+
+      let audioStreamEndPromise = new Promise((resolve, reject) => {
+        audioStream.on('end', resolve)
+      })
+
+      Promise.all([videoStreamEndPromise, audioStreamEndPromise]).then(() => {
         win.webContents.send('video:download_success')
+        clearInterval(progressNotifier)
+        console.log('here')
+        ffmpeg.ffprobe(tempVideoPath, (err, metadata) => {
+          console.log(err)
+          console.log(metadata)
+        })
       })
     })
   } else {

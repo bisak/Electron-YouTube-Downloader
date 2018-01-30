@@ -14,8 +14,8 @@
 
         <mz-progress *ngIf="downloadStarted"
                      [percentage]="percentDownloaded"
-                     [backgroundClass]="'red lighten-4 video-download-progress'"
-                     [progressClass]="'red'">
+                     [backgroundClass]="downloaded ? 'green video-download-progress' : 'red lighten-4 video-download-progress'"
+                     [progressClass]="downloaded ? 'green' : 'red'">
         </mz-progress>
 
       </div>
