@@ -46,10 +46,31 @@
     </div>
 
     <div class="row no-margin-bottom">
-      <button mz-button [disabled]="isDownloadBtnDisabled" (click)="outputDownloadVideoEvent()" class="right">
-        download
-        <i mz-icon-mdi [icon]="'download'" [align]="'right'"></i>
-      </button>
+      <div class="col s12">
+
+        <div class="col s2 push-s4">
+          <mz-select-container class="no-margin">
+            <select [(ngModel)]="choosenFormat" class="no-margin" mz-select
+                    id="option-groups-select">
+              <optgroup label="Video">
+                <option value=".mp4">.mp4</option>
+                <option value=".mov">.mov</option>
+              </optgroup>
+              <optgroup label="Audio">
+                <option value=".mp3">.mp3</option>
+              </optgroup>
+            </select>
+          </mz-select-container>
+        </div>
+
+        <div class="col s6 push-s3 offset-s1">
+          <button mz-button [disabled]="isDownloadBtnDisabled" (click)="outputDownloadVideoEvent()" class="right">
+            download
+            <i mz-icon-mdi [icon]="'download'" [align]="'right'"></i>
+          </button>
+        </div>
+
+      </div>
     </div>
 
   </mz-card-content>

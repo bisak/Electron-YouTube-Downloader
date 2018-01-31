@@ -23,6 +23,14 @@ $secondary-color: color("light-blue", "accent-4");
   margin: 0 !important;
 }
 
+.select-dropdown {
+  margin: 0 !important;
+}
+
+.no-margin > div.input-field {
+  margin: -7px !important;
+}
+
 .pointer {
   cursor: pointer;
 }

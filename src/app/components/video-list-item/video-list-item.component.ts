@@ -16,6 +16,7 @@ export class VideoListItemComponent implements OnInit, OnDestroy {
   downloadStarted = false;
   videoLength = '';
   downloaded = false;
+  choosenFormat = '.mp4';
 
   constructor (private electronService: ElectronService,
                private changeDetectorRef: ChangeDetectorRef,
@@ -43,7 +44,7 @@ export class VideoListItemComponent implements OnInit, OnDestroy {
   }
 
   outputDownloadVideoEvent () {
-    this.electronService.ipcRenderer.send('video:download_single', this.videoInfo);
+    this.electronService.ipcRenderer.send('video:download_single', this.videoInfo, this.choosenFormat);
     this.electronService.ipcRenderer.on('video:download_success', this.videoDownloadSuccessHandler.bind(this));
     this.electronService.ipcRenderer.on('video:download_progress', this.videoDownloadProgressHandler.bind(this));
     this.electronService.ipcRenderer.on('video:download_start', this.videoDownloadStartHandler.bind(this));
