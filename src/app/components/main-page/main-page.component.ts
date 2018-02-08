@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { MzToastService } from 'ng2-materialize';
+import { ElectronService } from 'ngx-electron';
 
 @Component({
   selector: 'app-main-page',
@@ -7,9 +9,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MainPageComponent implements OnInit {
 
-  constructor() { }
+  constructor (private toastService: MzToastService,
+               private electronService: ElectronService) {
+  }
 
-  ngOnInit() {
+  ngOnInit () {
+    this.electronService.ipcRenderer.on('error:generic', (event, data) => {
+      this.toastService.show(data, 1750);
+    });
   }
 
 }

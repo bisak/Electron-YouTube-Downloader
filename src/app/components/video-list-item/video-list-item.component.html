@@ -50,7 +50,7 @@
 
         <div class="col s2 push-s4">
           <mz-select-container class="no-margin">
-            <select [(ngModel)]="choosenFormat" class="no-margin" mz-select
+            <select [disabled]="hasDownloadStarted" [(ngModel)]="chosenFormat" class="no-margin" mz-select
                     id="option-groups-select">
               <optgroup label="Video">
                 <option value=".mp4">.mp4</option>
@@ -64,7 +64,7 @@
         </div>
 
         <div class="col s6 push-s3 offset-s1">
-          <button mz-button [disabled]="isDownloadBtnDisabled" (click)="outputDownloadVideoEvent()" class="right">
+          <button mz-button [disabled]="hasDownloadStarted" (click)="outputDownloadVideoEvent()" class="right">
             download
             <i mz-icon-mdi [icon]="'download'" [align]="'right'"></i>
           </button>

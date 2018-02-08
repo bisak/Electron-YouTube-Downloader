@@ -27,6 +27,13 @@ export class VideoListComponent implements OnInit {
       this.changeDetectorRef.detectChanges();
       // TODO remove array creation
     });
+    this.electronService.ipcRenderer.on('link:playlist_info_success', (event, videosInfo) => {
+      this.videosInfo = videosInfo;
+      console.log(this.videosInfo)
+      this.communicationService.videoInfoFetchEnd();
+      this.changeDetectorRef.detectChanges();
+      // TODO remove array creation
+    });
   }
 
   removeVideoFromList (videoToRemove) {

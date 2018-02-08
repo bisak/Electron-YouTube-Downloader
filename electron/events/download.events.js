@@ -6,17 +6,34 @@ const filenamify = require('filenamify')
 const ffmpeg = require('fluent-ffmpeg')
 const fse = require('fs-extra')
 const shortid = require('shortid')
+const isPlaylist = require('is-playlist')
+const ytpl = require('ytpl')
+const ytActionsHelper = require('../helpers/youtube-actions.helper')
 
 ipcMain.on('link:submit', (event, url) => {
   const win = BrowserWindow.fromWebContents(event.sender)
 
-  ytdl.getInfo(url).then((videoInfo) => {
-    win.webContents.send('link:video_info_success', videoInfo)
-  }).catch((error) => {
-    win.webContents.send('link:video_info_error', error)
-    console.log('send info error', error)
-  })
-
+  if (isPlaylist(url)) {
+    ytpl(url, { limit: 200 }).then((playlistInfo) => {
+      let videoInfoPromises = []
+      playlistInfo.items.forEach((item) => {
+        videoInfoPromises.push(ytdl.getInfo(item.url_simple))
+      })
+      return Promise.all(videoInfoPromises).then((videosInfo) => {
+        win.webContents.send('link:playlist_info_success', videosInfo)
+      })
+    }).catch((error) => {
+      win.webContents.send('link:playlist_info_error', error) // TODO add error handler
+      console.log('PLAYLIST INFO ERROR', error)
+    })
+  } else {
+    ytdl.getInfo(url).then((videoInfo) => {
+      win.webContents.send('link:video_info_success', videoInfo)
+    }).catch((error) => {
+      win.webContents.send('link:video_info_error', error) // TODO add error handler
+      console.log('VIDEO INFO ERROR', error)
+    })
+  }
 })
 
 ipcMain.on('video:download_single', (event, videoInfo, choosenFormat) => {
