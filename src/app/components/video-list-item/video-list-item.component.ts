@@ -29,9 +29,10 @@ export class VideoListItemComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy () {
-    this.electronService.ipcRenderer.removeAllListeners('video:download_success');
-    this.electronService.ipcRenderer.removeAllListeners('video:download_progress');
-    this.electronService.ipcRenderer.removeAllListeners('video:download_start');
+    console.log('destroy');
+    this.electronService.ipcRenderer.removeAllListeners(`video:download_success_${this.videoInfo.eventid}`);
+    this.electronService.ipcRenderer.removeAllListeners(`video:download_progress_${this.videoInfo.eventid}`);
+    this.electronService.ipcRenderer.removeAllListeners(`video:download_start_${this.videoInfo.eventid}`);
   }
 
 
@@ -45,9 +46,12 @@ export class VideoListItemComponent implements OnInit, OnDestroy {
 
   outputDownloadVideoEvent () {
     this.electronService.ipcRenderer.send('video:download_single', this.videoInfo, this.chosenFormat);
-    this.electronService.ipcRenderer.on('video:download_success', this.videoDownloadSuccessHandler.bind(this));
-    this.electronService.ipcRenderer.on('video:download_progress', this.videoDownloadProgressHandler.bind(this));
-    this.electronService.ipcRenderer.on('video:download_start', this.videoDownloadStartHandler.bind(this));
+    this.electronService.ipcRenderer
+      .on(`video:download_success_${this.videoInfo.eventid}`, this.videoDownloadSuccessHandler.bind(this));
+    this.electronService.ipcRenderer
+      .on(`video:download_progress_${this.videoInfo.eventid}`, this.videoDownloadProgressHandler.bind(this));
+    this.electronService.ipcRenderer
+      .on(`video:download_start_${this.videoInfo.eventid}`, this.videoDownloadStartHandler.bind(this));
   }
 
   videoDownloadSuccessHandler (event, data) {

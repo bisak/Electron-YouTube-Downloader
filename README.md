@@ -11,5 +11,3 @@
 3. `npm run angular-start`
 
 4. `npm run electron-start`
-
-#### App is really buggy, early, unfinished and beta!

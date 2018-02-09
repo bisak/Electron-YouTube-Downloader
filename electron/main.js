@@ -1,7 +1,9 @@
 const { app } = require('electron')
 const MainWindow = require('./app/main-window')
+const { ensureTempDirExists } = require('./helpers/general.helper')
 
 require('./events')
+ensureTempDirExists()
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
